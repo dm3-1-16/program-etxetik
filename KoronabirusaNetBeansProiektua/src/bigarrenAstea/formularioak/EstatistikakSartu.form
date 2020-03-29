@@ -39,10 +39,8 @@
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                              <Component id="jTextFieldKutsatuak" alignment="0" pref="84" max="32767" attributes="0"/>
-                              <Component id="jTextFieldHildakoak" alignment="0" max="32767" attributes="0"/>
-                          </Group>
+                          <Component id="jTextFieldKutsatuak" alignment="0" pref="213" max="32767" attributes="0"/>
+                          <Component id="jTextFieldHildakoak" alignment="0" max="32767" attributes="0"/>
                           <Component id="jComboHerrialdea" alignment="0" max="32767" attributes="0"/>
                           <Component id="jXDatePicker1" alignment="0" pref="213" max="32767" attributes="0"/>
                       </Group>
@@ -109,7 +107,7 @@
           <Font name="Dialog" size="18" style="0"/>
         </Property>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="new bigarrenAstea.modeloak.HerrialdeenComboBoxModela(&quot;&quot;)" type="code"/>
+          <Connection code="new bigarrenAstea.modeloak.HerrialdeenComboBoxModela(&quot;dbtik&quot;)" type="code"/>
         </Property>
       </Properties>
       <Events>

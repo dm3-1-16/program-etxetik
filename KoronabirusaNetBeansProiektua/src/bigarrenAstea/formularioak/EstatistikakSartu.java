@@ -5,7 +5,10 @@
  */
 package bigarrenAstea.formularioak;
 
-import bigarrenAstea.modeloak.HerrialdeenComboBoxModela;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
 /**
@@ -45,7 +48,7 @@ public class EstatistikakSartu extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jComboHerrialdea.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        jComboHerrialdea.setModel(new bigarrenAstea.modeloak.HerrialdeenComboBoxModela(""));
+        jComboHerrialdea.setModel(new bigarrenAstea.modeloak.HerrialdeenComboBoxModela("dbtik"));
         jComboHerrialdea.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboHerrialdeaActionPerformed(evt);
@@ -126,9 +129,8 @@ public class EstatistikakSartu extends javax.swing.JFrame {
                             .addComponent(jLabel6))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jTextFieldKutsatuak, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 84, Short.MAX_VALUE)
-                                .addComponent(jTextFieldHildakoak, javax.swing.GroupLayout.Alignment.LEADING))
+                            .addComponent(jTextFieldKutsatuak, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)
+                            .addComponent(jTextFieldHildakoak)
                             .addComponent(jComboHerrialdea, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jXDatePicker1, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE))
                         .addGap(0, 0, Short.MAX_VALUE))))
@@ -196,7 +198,45 @@ public class EstatistikakSartu extends javax.swing.JFrame {
     }//GEN-LAST:event_jXDatePicker1ActionPerformed
 
     private void jButtonTxertatuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonTxertatuActionPerformed
-        JOptionPane.showMessageDialog(null, "Lanean gabiltza datuak datu-basean gordetzeko.");
+
+        //  Estatistika eBerria = new Estatistika(jXDatePicker1.getDate(),(String)jComboHerrialdea.getSelectedItem(),Integer.parseInt(jTextFieldKutsatuak.getText()),Integer.parseInt(jTextFieldHildakoak.getText()));
+        String taula = "Estatistikak";
+        String sql = "INSERT INTO " + taula + " VALUES (?,?,?,?)";
+
+        try (Connection conn = konektatu();
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setDate(1, new java.sql.Date(jXDatePicker1.getDate().getTime()));
+            pstmt.setString(2, (String) jComboHerrialdea.getSelectedItem());
+            pstmt.setInt(3, Integer.parseInt(jTextFieldKutsatuak.getText()));
+            pstmt.setInt(4, Integer.parseInt(jTextFieldHildakoak.getText()));
+
+            pstmt.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Erregistroa ondo txertatu da.");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+    }
+
+    public static Connection konektatu() {
+
+        String server = "localhost";
+        String db = "KoronabirusaDB";
+        String url = "jdbc:mysql://" + server + "/" + db;
+        String user = "ikaslea";
+        String pass = "ikaslea";
+
+        Connection conn = null;
+
+        try {
+            conn = DriverManager.getConnection(url, user, pass);
+        } catch (SQLException e) {
+            System.out.println("SQL Errorea: " + e.getErrorCode() + "-" + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("SQL ez dan errorea: " + e.getMessage());
+        }
+        return conn;
+
     }//GEN-LAST:event_jButtonTxertatuActionPerformed
 
     /**
@@ -216,19 +256,25 @@ public class EstatistikakSartu extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(EstatistikakSartu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EstatistikakSartu.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(EstatistikakSartu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EstatistikakSartu.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(EstatistikakSartu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EstatistikakSartu.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(EstatistikakSartu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(EstatistikakSartu.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+
                 new EstatistikakSartu().setVisible(true);
             }
         });
